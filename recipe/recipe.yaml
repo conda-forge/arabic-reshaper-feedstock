@@ -2,8 +2,8 @@
 schema_version: 1
 
 context:
-  version: "3.0.1"
-  python_check_max: "3.14"
+  version: "3.1.0"
+  python_check_max: "3.15"
 
 package:
   name: arabic-reshaper
@@ -12,17 +12,17 @@ package:
 source:
   - target_directory: dist
     url: https://files.pythonhosted.org/packages/source/a/arabic-reshaper/arabic_reshaper-${{ version }}.tar.gz
-    sha256: a0d9b2a9fa29b5f2c1d705f407adf6ca4242405b9cac0e5cc09e6c4f3f8fb68c
+    sha256: 87f9a3634ca64f67a18d04593eadb3a148794233ba408fbb625649feedcdd0e0
   - target_directory: src
     url: https://github.com/mpcabd/python-arabic-reshaper/archive/refs/tags/v${{ version }}.tar.gz
-    sha256: eb1b9df3b5aaf3e8c1a454aad9f7754a062c2f2d134d972209b801db933caa7c
+    sha256: 8262ed8f26aeca7fc937ea1d9638fa4ab16ab6e8fa3a34d949f6f39560d5455f
 
 build:
   number: 0
   noarch: python
   script:
     - cd dist
-    - ${{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation --disable-pip-version-check
+    - ${{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation --disable-pip-version-check --check-build-dependencies
 
 requirements:
   host:
@@ -33,6 +33,13 @@ requirements:
     - python >=${{ python_min }}
 
 tests:
+  - package_contents:
+      strict: true
+      files:
+        - etc/conda/test-files/arabic-reshaper/**
+      site_packages:
+        - arabic_reshaper/**
+        - arabic_reshaper-${{ version }}.dist-info/**
   - python:
       imports: arabic_reshaper
       pip_check: true
